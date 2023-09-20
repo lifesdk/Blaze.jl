@@ -3,6 +3,10 @@ uuid = "d9380286-669a-4c80-beba-0bb7d51c4fc0"
 authors = ["jason89757"]
 version = "1.0.0-DEV"
 
+[deps]
+MsgPack = "99f44e22-a591-53d1-9472-aa23ef4bd671"
+Sockets = "6462fe0b-24de-5631-8697-dd941f90decc"
+
 [compat]
 julia = "1"
 
