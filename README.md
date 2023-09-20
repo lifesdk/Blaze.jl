@@ -1,2 +1,3 @@
-# Blaze.jl
-函数响应式编程框架
+# Blaze
+
+[![Build Status](https://github.com/Cyvadra/Blaze.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/Cyvadra/Blaze.jl/actions/workflows/CI.yml?query=branch%3Amain)
