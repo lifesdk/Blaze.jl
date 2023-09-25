@@ -3,6 +3,8 @@ using Test
 
 @testset "Blaze.jl" begin
   # neuron.jl
+  @test typeof( Blaze.new(Blaze.NeuronCache) ) == Blaze.NeuronCache
+  @test iszero( Blaze.new(Blaze.NeuronParams).MinUpdateIntervalMs )
   n = Blaze.Neuron(
     "testName",
     zero(UInt128),
