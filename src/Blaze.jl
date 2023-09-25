@@ -1,6 +1,6 @@
 module Blaze
 
-export greet_your_package_name
-include("functions.jl")
+include("./suggar.jl")
+include("./neuron.jl")
 
 end
