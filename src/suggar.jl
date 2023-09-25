@@ -5,6 +5,8 @@ emptyInitials = Dict{DataType, Any}(
 	Vector{UInt8} => UInt8[],
 	Threads.SpinLock => Threads.SpinLock(),
 	DataType => UInt8,
+	Bool => false,
+	Function => x->x,
 	);
 
 function new(data_type::T) where T <: DataType
