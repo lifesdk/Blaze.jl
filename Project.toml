@@ -9,6 +9,7 @@ MsgPack = "99f44e22-a591-53d1-9472-aa23ef4bd671"
 Sockets = "6462fe0b-24de-5631-8697-dd941f90decc"
 
 [compat]
+MsgPack = "1"
 julia = "1"
 
 [extras]
