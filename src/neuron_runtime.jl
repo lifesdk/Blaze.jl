@@ -31,7 +31,7 @@ function RegisterNeuron(name::String, desc::String, updated_ts::Int64, input_nam
 
 function RegisterNeuronSimple(f::Function, updated_ts::Int64, output_type::DataType)
 	@assert length(methods(f)) == 1
-	tmpMeta  = methods(f)[1]
+	tmpMeta  = methods(f).ms[1]
 	tmpNames = string(tmpMeta)
 	tmpNames = eachmatch(r"[\(, ](.+?)::.+?[,\)]", tmpNames) |> collect
 	tmpNames = map(x->string(x.captures[1]), tmpNames)
@@ -41,7 +41,7 @@ function RegisterNeuronSimple(f::Function, updated_ts::Int64, output_type::DataT
 
 function RegisterNeuronAuto(name::String, desc::String, updated_ts::Int64, input_names::Vector, output_type::DataType, calculation::Function)
 	@assert length(methods(calculation)) == 1
-	tmpMeta  = methods(calculation)[1]
+	tmpMeta  = methods(calculation).ms[1]
 	tmpTypes = Vector{DataType}(collect(tmpMeta.sig.types[2:end]))
 	return RegisterNeuron( name, desc, updated_ts, input_names, tmpTypes, output_type, 3, 60, true, true, 10.0, calculation )
 	end
