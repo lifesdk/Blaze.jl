@@ -22,6 +22,7 @@ mutable struct NeuronCache
 	Calculation::Function
 	ProcessLock::Threads.SpinLock
 	UpsteamsChanged::Bool
+	UpstreamUUIDs::Vector{UInt128}
 	DownstreamUUIDs::Vector{UInt128}
 	LastUpdatedTimestamp::Int64
 	LastResultPacked::Vector{UInt8}
