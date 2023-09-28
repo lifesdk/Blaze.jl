@@ -5,7 +5,7 @@ using Test
   # neuron.jl
   @test typeof( Blaze.new(Blaze.NeuronCache) ) == Blaze.NeuronCache
   @test iszero( Blaze.new(Blaze.NeuronParams).MinUpdateIntervalMs )
-  n = Blaze.Neuron(
+  n = Blaze.NeuronBase(
     "testName",
     zero(UInt128),
     "something here, safe to change any time",
