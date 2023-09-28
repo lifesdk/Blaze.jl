@@ -1,6 +1,6 @@
 using MsgPack, CRC32
 
-mutable struct Neuron
+mutable struct NeuronBase
 	UniqueName::String
 	UUID::UInt128
 	Description::String
@@ -27,7 +27,7 @@ mutable struct NeuronCache
 	ErrorLastInfo::String
 	end
 
-function GenerateUUID!(n::Neuron)::UInt128
+function GenerateUUID!(n::NeuronBase)::UInt128
 	id = UInt128(0)
 	# 1-8 timestamp
 	id += UInt32(n.VersionTimestamp)
