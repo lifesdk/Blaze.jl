@@ -25,7 +25,6 @@ mutable struct NeuronCache
 	LastUpdatedTimestamp::Int64
 	LastResultPacked::Vector{UInt8}
 	ErrorLastTs::Int64
-	ErrorLastFactorPacked::Vector{UInt8}
 	ErrorLastInfo::String
 	end
 
