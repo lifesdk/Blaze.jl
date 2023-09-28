@@ -11,7 +11,7 @@ mapNameUUID = Dict{String, UInt128}();
 function RegisterNeuron(name::String, desc::String, updated_ts::Int64, input_names::Vector, input_types::Vector{DataType}, output_type::DataType, min_update_seconds::Int64, min_update_cache_seconds::Int64, flag_allow_cache::Bool, flag_autotrigger::Bool, weight_priority::Float64, calculation::Function)::Bool
 	# check deps
 	input_names = string.(input_names)
-	@assert all(map(x->haskey(mapNameUUID,x),input_names))
+	all(map(x->haskey(mapNameUUID,x),input_names)) || throw("Incomplete upstream: " * join(input_names,' '))
 	# construct neuron
 	n1 = NeuronBase(name, zero(UInt128), desc, updated_ts, input_names, input_types, output_type)
 	GenerateUUID!(n1)
@@ -25,6 +25,7 @@ function RegisterNeuron(name::String, desc::String, updated_ts::Int64, input_nam
 		if !( n1.UUID in Network[ mapNameUUID[c] ].Cache[].DownstreamUUIDs )
 			push!( Network[ mapNameUUID[c] ].Cache[].DownstreamUUIDs, n1.UUID )
 		end
+		push!( n3.UpstreamUUIDs, mapNameUUID[c] )
 	end
 	return true
 	end
