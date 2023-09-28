@@ -11,8 +11,9 @@ using Test
     "something here, safe to change any time",
     1695614400,
     String["x1", "x2", "longitude"],
-    Blaze.MsgPack.pack([1,"2",3.0]),
+    DataType[Vector{Int}, Float64, String],
     Vector{Float64},
     )
-  @test !iszero(Blaze.GenerateUUID!(n))
+  Blaze.GenerateUUID!(n)
+  @test !iszero(n.UUID)
 end
