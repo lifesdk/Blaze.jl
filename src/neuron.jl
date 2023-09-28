@@ -14,6 +14,8 @@ mutable struct NeuronParams
 	MinUpdateIntervalMs::Int64
 	MinMakeCacheIntervalMs::Int64
 	SwitchMakeCache::Bool
+	SwitchAutoTrigger::Bool
+	WeightPriority::Float64
 	end
 
 mutable struct NeuronCache
