@@ -6,7 +6,7 @@ mutable struct NeuronBase
 	Description::String
 	VersionTimestamp::Int64
 	NamesFactor::Vector{String}
-	CaseFactor::Vector{UInt8} # with types involved
+	TypesFactor::Vector{String} # string.(nameof.(typeof.(input_params)))
 	OutputFormat::DataType
 	end
 
@@ -36,7 +36,7 @@ function GenerateUUID!(n::NeuronBase)::UInt128
 	id += CRC32.crc32( n.UniqueName )
 	id = id << 32
 	# 17-24 hashcode
-	id += CRC32.crc32( join(n.NamesFactor) * join(typeof.(unpack(n.CaseFactor))) )
+	id += CRC32.crc32( join(n.NamesFactor) * join(typeof.(unpack(n.TypesFactor))) )
 	id = id << 32
 	# 25-32 rand; ignore
 	id += CRC32.crc32( string(nameof(n.OutputFormat)) * string(new(n.OutputFormat)) * join(n.OutputFormat.types) )
