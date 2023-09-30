@@ -24,7 +24,7 @@ function RandomeVectorSmoothed32(v::Vector{Float64})::Vector{Float32}
   # name test
   Blaze.RegisterNeuronAuto("random_float64_20", "generate a random float64 vector whose length", tmpTs, String[], Vector{Float64}, RandomVectorFloat64)
   @test length(Blaze.Network) > 1
-  @test Blaze.SetNeuronParams("random_float64_20", 1, 3, false, true, 0.0) |> isnothing
+  @test Blaze.SetNeuronParams("random_float64_20", 1, false, 0.0) |> isnothing
   # dependency test
   Blaze.RegisterNeuronAuto("random_float64_20_smoothed", "like random_float64_20", tmpTs, String["random_float64_20"], Vector{Float32}, RandomeVectorSmoothed32)
   @test length(Blaze.Network) > 2
