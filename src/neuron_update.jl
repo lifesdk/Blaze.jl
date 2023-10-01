@@ -60,7 +60,7 @@ function ExecuteRevision()::Nothing
 	# iterate
 		tmpInds = zeros(Bool, length(ReviseList))
 		for i in 1:length(ReviseList)
-			tmpInds[i] = Revise(UUID)
+			tmpInds[i] = Revise(ReviseList[i])
 		end
 	# validate
 		if !all(tmpInds)
