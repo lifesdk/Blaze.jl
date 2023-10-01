@@ -18,7 +18,7 @@ function RandomeVectorSmoothed32(v::Vector{Float64})::Vector{Float32}
 @testset "Blaze.jl" begin
   tmpTs = round(Int,time())
   # unit test
-  Blaze.RegisterNeuronSimple(RandomVectorFloat64, tmpTs, Vector{Float64})
+  Blaze.RegisterNeuronSimple(RandomVectorFloat64, tmpTs)
   @test length(Blaze.Network) > 0
   @test haskey(Blaze.Network,Blaze.mapNameUUID["RandomVectorFloat64"])
   # name test
