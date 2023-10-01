@@ -37,9 +37,9 @@ function SomeStatistic(v::Vector{Float64})::Float64
   # trigger motivation
   @test isnothing( Blaze.Commit(tmpIds[1]) )
   @show @time Blaze.ExecuteRevision()
-  @test Blaze.Network[tmpIds[5]].Cache[].LastUpdatedTimestamp > tmpTs
+  @test Blaze.LastUpdated(tmpIds[5]) > tmpTs
   @test !isnothing(Blaze.Network[tmpIds[5]].Cache[].LastResult[])
-  @test typeof(Blaze.Network[tmpIds[5]].Cache[].LastResult[]) == Float64
+  @test typeof(Blaze.View("/calc/result")) == Float64
   for i in 1:5
     @info i
     @info Blaze.Network[tmpIds[i]].Base[].UniqueName
