@@ -53,6 +53,7 @@ function Revise(UUID::UInt128)::Bool
 function ExecuteRevision()::Nothing
 	lock(ReviseLock)
 	if isempty(ReviseList)
+		unlock(ReviseLock)
 		return nothing
 	end
 	# pretreatment
