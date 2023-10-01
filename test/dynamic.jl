@@ -1,17 +1,18 @@
 using Blaze
 using Test
-using Random
 
 function CurrentTimestamp()::Int64
   round(Int,time())
   end
 function BackgroundNoiseWhen(ts::Int64)::Vector{Float64}
-  rng = Random.Xoshiro(ts)
-  rand(rng,Float64,20)
+  # rng = Random.Xoshiro(ts)
+  # rand(rng,Float64,20)
+  rand(Float64,20)
   end
 function AnotherBackgroundNoise(ts::Int64)::Vector{Float64}
-  rng = Random.MersenneTwister(ts)
-  rand(rng,Float64,20)
+  # rng = Random.MersenneTwister(ts)
+  # rand(rng,Float64,20)
+  rand(Float64,20)
   end
 function SomeEntangle(v1::Vector{Float64}, v2::Vector{Float64})::Vector{Float64}
   return v1 .- v2
