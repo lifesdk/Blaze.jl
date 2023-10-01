@@ -4,7 +4,8 @@ ReviseList = UInt128[];
 ReviseLockDelayed = Threads.SpinLock();
 ReviseListDelayed = UInt128[];
 
-function ReviseDownstream(ids::Vector{UInt128})::Nothing
+function Commit(ids::Union{UInt128,Vector{UInt128}})::Nothing
+	@assert all(map(id->haskey(Motivation,id),ids))
 	lock(ReviseLock)
 	append!(ReviseList, ids)
 	unlock(ReviseLock)
