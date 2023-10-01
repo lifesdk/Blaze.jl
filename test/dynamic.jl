@@ -1,6 +1,6 @@
 using Blaze
 using Test
-using Statistics, Random
+using Random
 
 function CurrentTimestamp()::Int64
   round(Int,time())
@@ -17,7 +17,7 @@ function SomeEntangle(v1::Vector{Float64}, v2::Vector{Float64})::Vector{Float64}
   return v1 .- v2
   end
 function SomeStatistic(v::Vector{Float64})::Float64
-  return Statistics.median(v)
+  return reduce(+,v) / length(v)
   end
 
 
@@ -38,11 +38,10 @@ function SomeStatistic(v::Vector{Float64})::Float64
   sleep(3)
   # trigger motivation
   @test isnothing( Blaze.Commit(tmpIds[1]) )
-  @info round(Int,time())
-  @show Blaze.Network[tmpIds[5]].Cache[].LastResult[]
-  Blaze.ExecuteRevision()
-  @show Blaze.Network[tmpIds[5]].Cache[].LastResult[]
+  @show @time Blaze.ExecuteRevision()
   @test Blaze.Network[tmpIds[5]].Cache[].LastUpdatedTimestamp > tmpTs
+  @test !isnothing(Blaze.Network[tmpIds[5]].Cache[].LastResult[])
+  @test typeof(Blaze.Network[tmpIds[5]].Cache[].LastResult[]) == Float64
   for i in 1:5
     @info i
     @info Blaze.Network[tmpIds[i]].Base[].UniqueName
