@@ -29,6 +29,7 @@ function Revise(UUID::UInt128)::Bool
 				map(x->Network[x].Cache[].LastResult[], n.Cache[].UpstreamUUIDs)...
 			) |> Ref
 			n.Cache[].LastUpdatedTimestamp = round(Int,time())
+			n.Cache[].CounterCalled += 1
 		catch e
 			@warn e
 			n.Cache[].ErrorLastTs = round(Int,time())
@@ -50,10 +51,10 @@ function Revise(UUID::UInt128)::Bool
 	end
 
 function ExecuteRevision()::Nothing
+	lock(ReviseLock)
 	if isempty(ReviseList)
 		return nothing
 	end
-	lock(ReviseLock)
 	# pretreatment
 		sort!(ReviseList, by=x->Network[x].Params[].WeightPriority, rev=true)
 		unique!(ReviseList)

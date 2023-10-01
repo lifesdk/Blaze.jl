@@ -17,7 +17,7 @@ function RegisterNeuron(name::String, desc::String, updated_ts::Int64, input_nam
 	n1 = NeuronBase(name, zero(UInt128), desc, updated_ts, input_names, input_types, output_type)
 	GenerateUUID!(n1)
 	n2 = NeuronParams(min_update_seconds, flag_allow_cache, weight_priority)
-	n3 = NeuronCache(calculation, Threads.SpinLock(), UInt128[], UInt128[], 0, Ref(nothing), 0, "")
+	n3 = NeuronCache(calculation, Threads.SpinLock(), UInt128[], UInt128[], 0, Ref(nothing), 0, "", 0)
 	# register network
 	Network[n1.UUID] = Neuron(Ref(n1), Ref(n2), Ref(n3))
 	mapNameUUID[n1.UniqueName] = n1.UUID

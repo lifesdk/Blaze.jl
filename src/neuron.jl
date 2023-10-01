@@ -25,6 +25,7 @@ mutable struct NeuronCache
 	LastResult::Base.RefValue
 	ErrorLastTs::Int64
 	ErrorLastInfo::String
+	CounterCalled::Int64
 	end
 
 function GenerateUUID!(n::NeuronBase)::UInt128
