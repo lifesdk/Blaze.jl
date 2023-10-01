@@ -19,6 +19,8 @@ function Revise(UUID::UInt128)::Bool
 	# cache check
 		if n.Params[].SwitchAllowCache && round(Int,time()) - n.Cache[].LastUpdatedTimestamp < n.Params[].MinUpdateIntervalSeconds
 			return n.Cache[].LastResult
+		elseif haskey(Motivation,UUID) && Motivation[UUID] > round(Int,time())
+			return n.Cache[].LastResult
 		end
 	# calculation
 		lock(n.Cache[].ProcessLock)
@@ -39,6 +41,10 @@ function Revise(UUID::UInt128)::Bool
 			lock(ReviseLockDelayed)
 			append!(ReviseListDelayed, n.Cache[].DownstreamUUIDs)
 			unlock(ReviseLockDelayed)
+		end
+	# update origin's timestamp
+		if haskey(Motivation,UUID)
+			Motivation[UUID] = n.Cache[].LastUpdatedTimestamp + n.Params[].MinUpdateIntervalSeconds
 		end
 	return iszero(n.Cache[].ErrorLastTs)
 	end
