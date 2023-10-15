@@ -28,10 +28,10 @@ function View(UUID::UInt128)
 	return Network[UUID].Cache[].LastResult[]
 	end
 
-function LastUpdated(name::String)
+function LastUpdated(name::String)::Int64
 	return Network[mapNameUUID[name]].Cache[].LastUpdatedTimestamp
 	end
-function LastUpdated(UUID::UInt128)
+function LastUpdated(UUID::UInt128)::Int64
 	return Network[UUID].Cache[].LastUpdatedTimestamp
 	end
 
