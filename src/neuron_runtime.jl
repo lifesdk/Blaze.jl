@@ -12,7 +12,9 @@ mapNameUUID = Dict{String, UInt128}();
 function registerNeuron(name::String, desc::String, updated_ts::Int64, input_names::Vector, input_types::Vector{DataType}, output_type::DataType, min_update_seconds::Int64, flag_allow_cache::Bool, weight_priority::Float64, calculation::Function)::UInt128
 	# check deps
 	input_names = string.(input_names)
-	all(map(x->haskey(mapNameUUID,x),input_names)) || throw("Incomplete upstream: " * join(input_names,' '))
+	if !(all(map(x->haskey(mapNameUUID,x),input_names)))
+		throw("Incomplete upstream: " * join(filter(x->!haskey(mapNameUUID,x),input_names), ' '))
+	end
 	# construct neuron
 	n1 = NeuronBase(name, zero(UInt128), desc, updated_ts, input_names, input_types, output_type)
 	GenerateUUID!(n1)
