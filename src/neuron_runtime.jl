@@ -9,7 +9,7 @@ Network = Dict{UInt128, Neuron}();
 Motivation = Dict{UInt128, Int64}();
 mapNameUUID = Dict{String, UInt128}();
 
-function RegisterNeuron(name::String, desc::String, updated_ts::Int64, input_names::Vector, input_types::Vector{DataType}, output_type::DataType, min_update_seconds::Int64, flag_allow_cache::Bool, weight_priority::Float64, calculation::Function)::UInt128
+function registerNeuron(name::String, desc::String, updated_ts::Int64, input_names::Vector, input_types::Vector{DataType}, output_type::DataType, min_update_seconds::Int64, flag_allow_cache::Bool, weight_priority::Float64, calculation::Function)::UInt128
 	# check deps
 	input_names = string.(input_names)
 	all(map(x->haskey(mapNameUUID,x),input_names)) || throw("Incomplete upstream: " * join(input_names,' '))
@@ -45,7 +45,7 @@ function RegisterNeuronSimple(f::Function, desc::String, updated_ts::Int64)::UIn
 	output_type = Base.return_types(f)
 	@assert length(output_type) == 1
 	output_type = output_type[1]
-	return RegisterNeuron( string(tmpMeta.name), desc, updated_ts, tmpNames, tmpTypes, output_type, 3, false, 10.0, f )
+	return registerNeuron( string(tmpMeta.name), desc, updated_ts, tmpNames, tmpTypes, output_type, 3, false, 10.0, f )
 	end
 
 function RegisterNeuronAuto(name::String, desc::String, updated_ts::Int64, input_names::Vector, calculation::Function)::UInt128
@@ -55,7 +55,7 @@ function RegisterNeuronAuto(name::String, desc::String, updated_ts::Int64, input
 	output_type = Base.return_types(calculation)
 	@assert length(output_type) == 1
 	output_type = output_type[1]
-	return RegisterNeuron( name, desc, updated_ts, input_names, tmpTypes, output_type, 3, false, 10.0, calculation )
+	return registerNeuron( name, desc, updated_ts, input_names, tmpTypes, output_type, 3, false, 10.0, calculation )
 	end
 
 function SetNeuronParams(name::String, min_update_seconds::Int64, flag_allow_cache::Bool, weight_priority::Float64)::Nothing
