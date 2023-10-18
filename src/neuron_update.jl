@@ -3,14 +3,22 @@ ReviseLock = Threads.SpinLock();
 ReviseList = UInt128[];
 ReviseLockDelayed = Threads.SpinLock();
 ReviseListDelayed = UInt128[];
+ReviseListChannel = Channel(64);
 
 function Commit(ids::Union{UInt128,Vector{UInt128}})::Nothing
 	@assert all(map(id->haskey(Motivation,id),ids))
-	lock(ReviseLock)
-	append!(ReviseList, ids)
-	unlock(ReviseLock)
+	put!(ReviseListChannel, ids)
 	return nothing
 	end
+
+COMMIT_CACHE_JOB = @async begin
+	while true
+		ids = take!(ReviseListChannel)
+		lock(ReviseLock)
+		append!(ReviseList, ids)
+		unlock(ReviseLock)
+	end
+end
 
 function Revise(UUID::UInt128)::Bool
 	# from top to bot
