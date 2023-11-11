@@ -8,6 +8,7 @@ mutable struct NeuronBase
 	NamesFactor::Vector{String}
 	TypesFactor::Vector{DataType} # of types
 	OutputFormat::DataType
+	NumLevel::Int64
 	end
 
 mutable struct NeuronParams

@@ -15,8 +15,13 @@ function registerNeuron(name::String, desc::String, updated_ts::Int64, input_nam
 	if !(all(map(x->haskey(mapNameUUID,x),input_names)))
 		throw("Incomplete upstream: " * join(filter(x->!haskey(mapNameUUID,x),input_names), ' '))
 	end
+	# calculate level
+	numLevel = 0
+	if !isempty(input_names)
+		numLevel = reduce(max, map(s->Network[mapNameUUID[s]].Base[].NumLevel, input_names)) + 1
+	end
 	# construct neuron
-	n1 = NeuronBase(name, zero(UInt128), desc, updated_ts, input_names, input_types, output_type)
+	n1 = NeuronBase(name, zero(UInt128), desc, updated_ts, input_names, input_types, output_type, numLevel)
 	GenerateUUID!(n1)
 	n2 = NeuronParams(min_update_seconds, flag_allow_cache, weight_priority)
 	n3 = NeuronCache(calculation, Threads.SpinLock(), UInt128[], UInt128[], 0, Ref(nothing), 0, "", 0)
