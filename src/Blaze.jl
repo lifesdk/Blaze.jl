@@ -2,6 +2,7 @@ module Blaze
 
 export MsgPack
 include("./suggar.jl")
+include("./params.jl")
 include("./neuron.jl")
 include("./neuron_runtime.jl")
 include("./neuron_update.jl")

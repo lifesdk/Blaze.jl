@@ -3,24 +3,15 @@ ReviseLock = Threads.SpinLock();
 ReviseList = UInt128[];
 ReviseLockDelayed = Threads.SpinLock();
 ReviseListDelayed = UInt128[];
-ReviseListChannel = Channel(64);
+ReviseListChannel = Channel(MaxSizeReviseListChannel);
 
 function Commit(ids::Union{UInt128,Vector{UInt128}})::Nothing
 	@assert all(map(id->haskey(Motivation,id),ids))
 	put!(ReviseListChannel, ids)
+	if length(ReviseListChannel.data)+1 >= ThredSizeAutoExecuteRevision
+		@async ExecuteRevision()
+	end
 	return nothing
-	end
-
-COMMIT_CACHE_JOB = @task begin
-	while true
-		ids = take!(ReviseListChannel)
-		lock(ReviseLock)
-		append!(ReviseList, ids)
-		unlock(ReviseLock)
-	end
-end
-function __init__()
-	schedule(COMMIT_CACHE_JOB)
 	end
 
 function Revise(UUID::UInt128)::Bool
@@ -62,10 +53,10 @@ function Revise(UUID::UInt128)::Bool
 	end
 
 function ExecuteRevision()::Nothing
-	while length(ReviseListChannel.data) > 0
-		sleep(0.01)
-	end
 	lock(ReviseLock)
+	while length(ReviseListChannel.data) > 0
+		append!(ReviseList, take!(ReviseListChannel))
+	end
 	if isempty(ReviseList)
 		unlock(ReviseLock)
 		return nothing
