@@ -33,6 +33,9 @@ function SomeStatistic(v::Vector{Float64})::Float64
   @test all(map(id->id in collect(values(Blaze.mapNameUUID)),tmpIds))
   @test haskey(Blaze.Motivation, tmpIds[1])
   @test haskey(Blaze.Network,Blaze.mapNameUUID["/calc/foobar"])
+  # detail
+  @test iszero(Blaze.Detail(tmpIds[1]).NumLevel)
+  @test isequal(Blaze.Detail("/calc/result").NumLevel, 3)
   # trigger motivation
   @test isnothing( Blaze.Commit(tmpIds[1]) )
   @show @time Blaze.ExecuteRevision()
