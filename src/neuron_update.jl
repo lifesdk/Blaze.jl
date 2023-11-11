@@ -28,6 +28,9 @@ function Revise(UUID::UInt128)::Bool
 			n.Cache[].CounterCalled += 1
 		catch e
 			@warn e
+			@info "$(n.Base[].UniqueName) - $UUID"
+			@info "UpstreamUUIDs: $(n.Cache[].UpstreamUUIDs) "
+			@info "Names: " * join( map(x->Network[x].Base[].UniqueName, n.Cache[].UpstreamUUIDs), ", " )
 			n.Cache[].ErrorLastTs = round(Int,time())
 			n.Cache[].ErrorLastInfo = string(e)
 		finally
