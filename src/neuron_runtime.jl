@@ -36,13 +36,15 @@ function registerNeuron(name::String, desc::String, updated_ts::Int64, input_nam
 		prvId = mapNameUUID[name]
 		tmpIds = Network[prvId].Cache[].DownstreamUUIDs
 		for id in tmpIds
-			deleteat!(Network[id].Cache[].UpstreamUUIDs, findfirst(x->x==prvId, Network[id].Cache[].UpstreamUUIDs))
-			push!(Network[id].Cache[].UpstreamUUIDs, n1.UUID)
+			replace!(Network[id].Cache[].UpstreamUUIDs, prvId => n1.UUID)
 		end
 		tmpIds = Network[prvId].Cache[].UpstreamUUIDs
 		for id in tmpIds
 			deleteat!(Network[id].Cache[].DownstreamUUIDs, findfirst(x->x==prvId, Network[id].Cache[].DownstreamUUIDs))
 		end
+		n3.ProcessLock = Network[prvId].Cache[].ProcessLock
+		# n3.UpstreamUUIDs = Network[prvId].Cache[].UpstreamUUIDs
+		n3.DownstreamUUIDs = Network[prvId].Cache[].DownstreamUUIDs
 		n3.LastUpdatedTimestamp = Network[prvId].Cache[].LastUpdatedTimestamp
 		n3.LastResult = Network[prvId].Cache[].LastResult
 		n3.CounterCalled = Network[prvId].Cache[].CounterCalled
