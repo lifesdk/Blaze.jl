@@ -11,7 +11,7 @@ function Commit(ids::Union{UInt128,Vector{UInt128}})::Nothing
 	return nothing
 	end
 
-COMMIT_CACHE_JOB = @async begin
+COMMIT_CACHE_JOB = @task begin
 	while true
 		ids = take!(ReviseListChannel)
 		lock(ReviseLock)
@@ -19,6 +19,9 @@ COMMIT_CACHE_JOB = @async begin
 		unlock(ReviseLock)
 	end
 end
+function __init__()
+	schedule(COMMIT_CACHE_JOB)
+	end
 
 function Revise(UUID::UInt128)::Bool
 	# from top to bot
