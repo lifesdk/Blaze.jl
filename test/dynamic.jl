@@ -1,5 +1,3 @@
-using Blaze
-using Test
 
 function CurrentTimestamp()::Int64
   round(Int,time())

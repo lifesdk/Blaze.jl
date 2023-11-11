@@ -1,5 +1,3 @@
-using Blaze
-using Test
 
 @testset "Blaze.jl" begin
   # neuron.jl
