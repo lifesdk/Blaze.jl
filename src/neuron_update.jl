@@ -1,10 +1,4 @@
 
-ReviseLock = Threads.SpinLock();
-ReviseList = UInt128[];
-ReviseLockDelayed = Threads.SpinLock();
-ReviseListDelayed = UInt128[];
-ReviseListChannel = Channel(MaxSizeReviseListChannel);
-
 function Commit(ids::Union{UInt128,Vector{UInt128}})::Nothing
 	@assert all(map(id->haskey(Motivation,id),ids))
 	put!(ReviseListChannel, ids)
