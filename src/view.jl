@@ -7,6 +7,7 @@ struct NeuronView
 	NamesFactor::String
 	TypesFactor::String
 	OutputFormat::String
+	NumLevel::Int64
 	# ---
 	MinUpdateIntervalSeconds::Int64
 	SwitchAllowCache::Bool
@@ -45,6 +46,7 @@ function Detail(UUID::UInt128)::NeuronView
 		join(n.Base[].NamesFactor, ", "),
 		join(n.Base[].TypesFactor, ", "),
 		string(n.Base[].OutputFormat),
+		n.Base[].NumLevel,
 		# ---
 		n.Params[].MinUpdateIntervalSeconds,
 		n.Params[].SwitchAllowCache,

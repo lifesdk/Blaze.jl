@@ -1,5 +1,3 @@
-using Blaze
-using Test
 
 @testset "Blaze.jl" begin
   # neuron.jl
@@ -13,6 +11,7 @@ using Test
     String["x1", "x2", "longitude"],
     DataType[Vector{Int}, Float64, String],
     Vector{Float64},
+    0,
     )
   Blaze.GenerateUUID!(n)
   @test !iszero(n.UUID)

@@ -1,5 +1,11 @@
 using MsgPack, CRC32
 
+ReviseLock = Threads.SpinLock();
+ReviseList = UInt128[];
+ReviseLockDelayed = Threads.SpinLock();
+ReviseListDelayed = UInt128[];
+ReviseListChannel = Channel(MaxSizeReviseListChannel);
+
 mutable struct NeuronBase
 	UniqueName::String
 	UUID::UInt128
@@ -8,6 +14,7 @@ mutable struct NeuronBase
 	NamesFactor::Vector{String}
 	TypesFactor::Vector{DataType} # of types
 	OutputFormat::DataType
+	NumLevel::Int64
 	end
 
 mutable struct NeuronParams

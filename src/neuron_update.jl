@@ -1,14 +1,10 @@
 
-ReviseLock = Threads.SpinLock();
-ReviseList = UInt128[];
-ReviseLockDelayed = Threads.SpinLock();
-ReviseListDelayed = UInt128[];
-
 function Commit(ids::Union{UInt128,Vector{UInt128}})::Nothing
 	@assert all(map(id->haskey(Motivation,id),ids))
-	lock(ReviseLock)
-	append!(ReviseList, ids)
-	unlock(ReviseLock)
+	put!(ReviseListChannel, ids)
+	if length(ReviseListChannel.data)+1 >= ThredSizeAutoExecuteRevision
+		@async ExecuteRevision()
+	end
 	return nothing
 	end
 
@@ -32,6 +28,9 @@ function Revise(UUID::UInt128)::Bool
 			n.Cache[].CounterCalled += 1
 		catch e
 			@warn e
+			@info "$(n.Base[].UniqueName) - $UUID"
+			@info "UpstreamUUIDs: $(n.Cache[].UpstreamUUIDs) "
+			@info "Names: " * join( map(x->Network[x].Base[].UniqueName, n.Cache[].UpstreamUUIDs), ", " )
 			n.Cache[].ErrorLastTs = round(Int,time())
 			n.Cache[].ErrorLastInfo = string(e)
 		finally
@@ -52,6 +51,9 @@ function Revise(UUID::UInt128)::Bool
 
 function ExecuteRevision()::Nothing
 	lock(ReviseLock)
+	while length(ReviseListChannel.data) > 0
+		append!(ReviseList, take!(ReviseListChannel))
+	end
 	if isempty(ReviseList)
 		unlock(ReviseLock)
 		return nothing

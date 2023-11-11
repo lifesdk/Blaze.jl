@@ -1,5 +1,3 @@
-using Blaze
-using Test
 
 function RandomVectorFloat64()::Vector{Float64}
   return rand(Float64, 20)
