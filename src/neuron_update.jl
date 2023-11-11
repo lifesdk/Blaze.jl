@@ -62,6 +62,9 @@ function Revise(UUID::UInt128)::Bool
 	end
 
 function ExecuteRevision()::Nothing
+	while length(ReviseListChannel.data) > 0
+		sleep(0.01)
+	end
 	lock(ReviseLock)
 	if isempty(ReviseList)
 		unlock(ReviseLock)
