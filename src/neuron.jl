@@ -18,7 +18,7 @@ mutable struct NeuronBase
 	end
 
 mutable struct NeuronParams
-	MinUpdateIntervalSeconds::Int64
+	MinUpdateIntervalSeconds::Float64
 	SwitchAllowCache::Bool
 	WeightPriority::Float64
 	end
@@ -28,9 +28,9 @@ mutable struct NeuronCache
 	ProcessLock::Threads.SpinLock
 	UpstreamUUIDs::Vector{UInt128}
 	DownstreamUUIDs::Vector{UInt128}
-	LastUpdatedTimestamp::Int64
+	LastUpdatedTimestamp::Float64
 	LastResult::Base.RefValue
-	ErrorLastTs::Int64
+	ErrorLastTs::Float64
 	ErrorLastInfo::String
 	CounterCalled::Int64
 	end

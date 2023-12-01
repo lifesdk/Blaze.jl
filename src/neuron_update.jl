@@ -13,7 +13,7 @@ function Revise(UUID::UInt128)::Bool
 	# must only be triggered automatically
 	n = Network[UUID]
 	# cache check
-		if n.Params[].SwitchAllowCache && round(Int,time()) - n.Cache[].LastUpdatedTimestamp < n.Params[].MinUpdateIntervalSeconds
+		if n.Params[].SwitchAllowCache && time()-n.Cache[].LastUpdatedTimestamp < n.Params[].MinUpdateIntervalSeconds
 			return true
 		elseif haskey(Motivation,UUID) && Motivation[UUID] > round(Int,time())
 			return true
@@ -24,7 +24,7 @@ function Revise(UUID::UInt128)::Bool
 			n.Cache[].LastResult = n.Cache[].Calculation(
 				map(x->Network[x].Cache[].LastResult[], n.Cache[].UpstreamUUIDs)...
 			) |> Ref
-			n.Cache[].LastUpdatedTimestamp = round(Int,time())
+			n.Cache[].LastUpdatedTimestamp = time()
 			n.Cache[].CounterCalled += 1
 		catch e
 			@warn e

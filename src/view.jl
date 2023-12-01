@@ -16,7 +16,7 @@ struct NeuronView
 	Calculation::String
 	UpstreamUUIDs::String
 	DownstreamUUIDs::String
-	LastUpdatedTimestamp::Int64
+	LastUpdatedTimestamp::Float64
 	ErrorLastTs::Int64
 	ErrorLastInfo::String
 	CounterCalled::Int64
@@ -29,10 +29,10 @@ function View(UUID::UInt128)
 	return Network[UUID].Cache[].LastResult[]
 	end
 
-function LastUpdated(name::String)::Int64
+function LastUpdated(name::String)::Float64
 	return Network[mapNameUUID[name]].Cache[].LastUpdatedTimestamp
 	end
-function LastUpdated(UUID::UInt128)::Int64
+function LastUpdated(UUID::UInt128)::Float64
 	return Network[UUID].Cache[].LastUpdatedTimestamp
 	end
 
