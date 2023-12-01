@@ -15,7 +15,7 @@ function Revise(UUID::UInt128)::Bool
 	# cache check
 		if n.Params[].SwitchAllowCache && time()-n.Cache[].LastUpdatedTimestamp < n.Params[].MinUpdateIntervalSeconds
 			return true
-		elseif haskey(Motivation,UUID) && Motivation[UUID] > round(Int,time())
+		elseif haskey(Motivation,UUID) && Motivation[UUID] > time()
 			return true
 		end
 	# calculation

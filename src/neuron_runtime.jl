@@ -6,7 +6,7 @@ struct Neuron
 	end
 
 Network = Dict{UInt128, Neuron}();
-Motivation = Dict{UInt128, Int64}();
+Motivation = Dict{UInt128, Float64}();
 mapNameUUID = Dict{String, UInt128}();
 
 function registerNeuron(name::String, desc::String, updated_ts::Int64, input_names::Vector, input_types::Vector{DataType}, output_type::DataType, min_update_seconds::Int64, flag_allow_cache::Bool, weight_priority::Float64, calculation::Function)::UInt128

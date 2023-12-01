@@ -1,13 +1,13 @@
 
-function CurrentTimestamp()::Int64
-  round(Int,time())
+function CurrentTimestamp()::Float64
+  time()
   end
-function BackgroundNoiseWhen(ts::Int64)::Vector{Float64}
+function BackgroundNoiseWhen(ts::Float64)::Vector{Float64}
   # rng = Random.Xoshiro(ts)
   # rand(rng,Float64,20)
   rand(Float64,20)
   end
-function AnotherBackgroundNoise(ts::Int64)::Vector{Float64}
+function AnotherBackgroundNoise(ts::Float64)::Vector{Float64}
   # rng = Random.MersenneTwister(ts)
   # rand(rng,Float64,20)
   rand(Float64,20)
