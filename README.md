@@ -58,3 +58,10 @@ Blaze.ExecuteRevision()
 
 
 ```
+
+
+### Todos
+1. [ ] The use of UUID seems redundant? Support name index in all methods.
+1. [ ] Explicit neuron update. There's no warning when we register same name neuron twice. Use another method or require user confirmation when doing update.
+1. [ ] Structurized visualization.
+
