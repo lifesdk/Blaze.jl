@@ -1,7 +1,7 @@
 name = "Blaze"
 uuid = "d9380286-669a-4c80-beba-0bb7d51c4fc0"
 authors = ["jason89757"]
-version = "1.0.3"
+version = "1.0.4"
 
 [deps]
 CRC32 = "b4567568-9dcc-467e-9b62-c342d3a501d3"

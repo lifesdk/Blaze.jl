@@ -20,11 +20,11 @@ function Sumarrize(value_mean::Vector{Float64}, factors::Vector{Float64})::Float
 	end
 
 @testset "Blaze.jl" begin
-	rootUUID = Blaze.RegisterNeuron("/root/spider", SomeSpider, String[], "since SomeSpider doesn't take any params, use an empty array as its input.")
+	Blaze.RegisterNeuron("/root/spider", SomeSpider, String[], "since SomeSpider doesn't take any params, use an empty array as its input.")
 	Blaze.RegisterNeuron("/analysis/1", SomeAnalysis, String["/root/spider"], "path names are user-defined,")
 	Blaze.RegisterNeuron("/analysis/2", OtherFactors, String["/root/spider"], "as long as you quote it correctly")
 	Blaze.RegisterNeuron("/output", Sumarrize, String["/analysis/1", "/analysis/2"], "pass input names in order")
-	Blaze.Commit(rootUUID)
+	Blaze.Trigger("/root/spider")
 	Blaze.ExecuteRevision()
 	@test isequal(Blaze.View("/output"), 3.0)
 	end

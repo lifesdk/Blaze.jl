@@ -1,11 +1,19 @@
 
-function Commit(ids::Union{UInt128,Vector{UInt128}})::Nothing
+function Trigger(ids::Union{UInt128,Vector{UInt128}})::Nothing
 	@assert all(map(id->haskey(Motivation,id),ids))
 	put!(ReviseListChannel, ids)
 	if length(ReviseListChannel.data)+1 >= ThredSizeAutoExecuteRevision
 		@async ExecuteRevision()
 	end
 	return nothing
+	end
+function Trigger(varNames::Vector{S})::Nothing where S <: AbstractString
+	@assert all(map(s->haskey(mapNameUUID,s),varNames))
+	return Trigger(map(x->mapNameUUID[x],varNames))
+	end
+function Trigger(name::S)::Nothing where S <: AbstractString
+	@assert haskey(mapNameUUID,name)
+	return Trigger(mapNameUUID[name])
 	end
 
 function Revise(UUID::UInt128)::Bool
