@@ -41,6 +41,7 @@ function SomeStatistic(v::Vector{Float64})::Float64
   @test isequal(Blaze.Detail("/calc/result").NumLevel, 3)
   # renew neuron
   tmpId = Blaze.UpdateNeuron("/var/noise_1", BackgroundNoiseWhen)
+  sleep(1.3)
   @test !isequal(tmpIds[2], tmpId)
   tmpIds[2] = tmpId
   # trigger motivation
@@ -59,4 +60,5 @@ function SomeStatistic(v::Vector{Float64})::Float64
     @info Blaze.Network[tmpIds[i]].Base[].UniqueName
     @info Blaze.Network[tmpIds[i]].Cache[].LastResult[]
   end
+  @show Blaze.Detail("/calc/result")
   end

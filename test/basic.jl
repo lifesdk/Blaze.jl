@@ -29,7 +29,9 @@ function RandomeVectorSmoothed32(v::Vector{Float64})::Vector{Float32}
   Blaze.GenerateUUID!(n)
   @test !iszero(n.UUID)
   # functional
-  tmpTs = round(Int,time())
+  tmpId = deepcopy(n.UUID)
+  sleep(1.3)
+  @test tmpId == Blaze.GenerateUUID!(n)
   # unit test
   Blaze.RegisterNeuronSimple(RandomVectorFloat64, "generate a float64 vector whose length is 20")
   @test length(Blaze.Network) > 0
