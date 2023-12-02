@@ -45,9 +45,7 @@ function SomeStatistic(v::Vector{Float64})::Float64
   @test !isequal(tmpIds[2], tmpId)
   tmpIds[2] = tmpId
   # trigger motivation
-  @test isnothing( Blaze.Notify(tmpIds[1]) )
-  @test isnothing( Blaze.Notify("/sys/timestamp") )
-  @test isnothing( Blaze.Notify(["/sys/timestamp","/sys/timestamp"]) )
+  @test isnothing( Blaze.Commit(tmpIds[1]) )
   tmpTask = @async Blaze.ExecuteRevision()
   # upgrade inside runtime
   tmpIds[2] = Blaze.UpdateNeuron("/var/noise_1", BackgroundNoiseWhen, String["/sys/timestamp"], "neuron upgrade test")
