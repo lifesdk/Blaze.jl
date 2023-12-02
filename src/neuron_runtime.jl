@@ -84,8 +84,26 @@ function RegisterNeuronSimple(f::Function, desc::String)::UInt128
 	return registerNeuron( string(tmpMeta.name), desc, round(Int,time()), tmpNames, tmpTypes, output_type, 1.0, true, 0.0, f )
 	end
 
-function RegisterNeuronAuto(name::String, calculation::Function, input_names::Vector, desc::String, min_update_seconds::Real=1.0, flag_allow_cache::Bool=true, weight_priority::Real=0.0)::UInt128
+function RegisterNeuronAuto(name::String, calculation::Function, input_names::Vector, desc::String, min_update_seconds::Real=1.0, flag_allow_cache::Bool=true, weight_priority::Real=0.0, flagForceUpgrade::Bool=false)::UInt128
 	@assert length(methods(calculation)) == 1
+	if !flagForceUpgrade && haskey(mapNameUUID,name)
+		throw("$name already exist! Use Update instead.")
+	end
+	tmpMeta  = methods(calculation).ms[1]
+	tmpTypes = Vector{DataType}(collect(tmpMeta.sig.types[2:end]))
+	output_type = Base.return_types(calculation)
+	@assert length(output_type) == 1
+	output_type = output_type[1]
+	return registerNeuron( name, desc, round(Int,time()), input_names, tmpTypes, output_type, min_update_seconds, flag_allow_cache, weight_priority, calculation )
+	end
+
+function UpdateNeuron(name::String, calculation::Function, input_names::Vector=String[], desc::String="", min_update_seconds::Real=1.0, flag_allow_cache::Bool=true, weight_priority::Real=0.0)::UInt128
+	@assert length(methods(calculation)) == 1
+	@assert haskey(mapNameUUID,name)
+	if isempty(input_names) && isempty(desc)
+		input_names = Network[mapNameUUID[name]].Base[].NamesFactor
+		desc = Network[mapNameUUID[name]].Base[].Description
+	end
 	tmpMeta  = methods(calculation).ms[1]
 	tmpTypes = Vector{DataType}(collect(tmpMeta.sig.types[2:end]))
 	output_type = Base.return_types(calculation)

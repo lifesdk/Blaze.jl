@@ -40,15 +40,15 @@ function SomeStatistic(v::Vector{Float64})::Float64
   @test iszero(Blaze.Detail(tmpIds[1]).NumLevel)
   @test isequal(Blaze.Detail("/calc/result").NumLevel, 3)
   # renew neuron
-  tmpId = Blaze.RegisterNeuronAuto("/var/noise_1", BackgroundNoiseWhen, String["/sys/timestamp"], "neuron upgrade test")
+  tmpId = Blaze.UpdateNeuron("/var/noise_1", BackgroundNoiseWhen)
   @test !isequal(tmpIds[2], tmpId)
   tmpIds[2] = tmpId
   # trigger motivation
   @test isnothing( Blaze.Commit(tmpIds[1]) )
   tmpTask = @async Blaze.ExecuteRevision()
   # upgrade inside runtime
-  tmpIds[2] = Blaze.RegisterNeuronAuto("/var/noise_1", BackgroundNoiseWhen, String["/sys/timestamp"], "neuron upgrade test")
-  tmpIds[4] = Blaze.RegisterNeuronAuto("/calc/foobar", SomeEntangleRenewed, String["/var/noise_1", "/var/noise_2"], "level 2 renewed")
+  tmpIds[2] = Blaze.UpdateNeuron("/var/noise_1", BackgroundNoiseWhen, String["/sys/timestamp"], "neuron upgrade test")
+  tmpIds[4] = Blaze.UpdateNeuron("/calc/foobar", SomeEntangleRenewed, String["/var/noise_1", "/var/noise_2"], "level 2 renewed")
   wait(tmpTask)
   # continue trigger
   @test Blaze.LastUpdated(tmpIds[5]) > tmpTs
