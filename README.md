@@ -2,12 +2,17 @@
 
 [![Build Status](https://github.com/Cyvadra/Blaze.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/Cyvadra/Blaze.jl/actions/workflows/CI.yml?query=branch%3Amain)
 
+### Purpose
+- Implement data transparency like R Studio but production-ready and structurized.
+- Automate pipelines by predefining procedures.
+- Build a framework that helps project refactoring.
+
+
 ### Intro
 A functional reactive programming framework.
 
 
 ### Usage
-
 ```julia
 
 # Explicit functions
