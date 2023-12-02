@@ -94,7 +94,7 @@ function RegisterNeuronAuto(name::String, desc::String, updated_ts::Int64, input
 	return registerNeuron( name, desc, updated_ts, input_names, tmpTypes, output_type, 3, false, 0.0, calculation )
 	end
 
-function SetNeuronParams(name::String, min_update_seconds::Int64, flag_allow_cache::Bool, weight_priority::Float64)::Nothing
+function SetNeuronParams(name::String, min_update_seconds::Real, flag_allow_cache::Bool, weight_priority::Real)::Nothing
 	p = Network[ mapNameUUID[name] ].Params[]
 	p.MinUpdateIntervalSeconds = min_update_seconds
 	p.SwitchAllowCache = flag_allow_cache
