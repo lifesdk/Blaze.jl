@@ -64,3 +64,7 @@ Blaze.ExecuteRevision()
 1. [ ] Explicit neuron update. There's no warning when we register same name neuron twice. Use another method or require user confirmation when doing update.
 1. [ ] Structurized visualization.
 
+
+### Issues
+- When doing neuron update in tests, same timestamp(int level) caused same UUID and thus error. This circumstance hardly happens in production, but shall be considered.
+
