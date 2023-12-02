@@ -41,7 +41,7 @@ function Sumarrize(value_mean::Vector{Float64}, factors::Vector{Float64})::Float
 # Register network
 
 using Blaze
-rootUUID = Blaze.RegisterNeuron("/root/spider", SomeSpider, String[], "since SomeSpider doesn't take any params, use an empty array as its input.")
+Blaze.RegisterNeuron("/root/spider", SomeSpider, String[], "since SomeSpider doesn't take any params, use an empty array as its input.")
 Blaze.RegisterNeuron("/analysis/1", SomeAnalysis, String["/root/spider"], "path names are user-defined,")
 Blaze.RegisterNeuron("/analysis/2", OtherFactors, String["/root/spider"], "as long as you quote it correctly")
 Blaze.RegisterNeuron("/output", Sumarrize, String["/analysis/1", "/analysis/2"], "pass input names in order")
@@ -50,7 +50,7 @@ Blaze.RegisterNeuron("/output", Sumarrize, String["/analysis/1", "/analysis/2"],
 
 # Use CRON or similar logic to trigger updates, then
 
-Blaze.Commit(rootUUID)
+Blaze.Notify("/root/spider")
 Blaze.ExecuteRevision()
 @show Blaze.View("/output")
 # 3.0
@@ -60,7 +60,7 @@ Blaze.ExecuteRevision()
 
 
 ### Todos
-1. [ ] The use of UUID seems redundant? Support name index in all methods.
+1. [x] The use of UUID seems redundant? Support name index in all methods.
 1. [x] Explicit neuron update. There's no warning when we register same name neuron twice. Use another method or require user confirmation when doing update.
 1. [ ] Structurized visualization.
 
