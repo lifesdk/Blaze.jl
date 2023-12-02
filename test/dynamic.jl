@@ -24,14 +24,14 @@ function SomeStatistic(v::Vector{Float64})::Float64
 
 
 @testset "Blaze.jl" begin
-  tmpTs = 1696075200
+  tmpTs = round(Int,time())
   # unit test
   tmpIds = zeros(UInt128,5)
-  tmpIds[1] = Blaze.RegisterNeuronAuto("/sys/timestamp", "desc: level 0", tmpTs, String[], CurrentTimestamp)
-  tmpIds[2] = Blaze.RegisterNeuronAuto("/var/noise_1", "level 1, original", tmpTs, String["/sys/timestamp"], BackgroundNoiseWhen)
-  tmpIds[3] = Blaze.RegisterNeuronAuto("/var/noise_2", "level 1", tmpTs, String["/sys/timestamp"], AnotherBackgroundNoise)
-  tmpIds[4] = Blaze.RegisterNeuronAuto("/calc/foobar", "level 2", tmpTs, String["/var/noise_1", "/var/noise_2"], SomeEntangle)
-  tmpIds[5] = Blaze.RegisterNeuronAuto("/calc/result", "level 3", tmpTs, String["/calc/foobar"], SomeStatistic)
+  tmpIds[1] = Blaze.RegisterNeuronAuto("/sys/timestamp", CurrentTimestamp, String[], "desc: level 0")
+  tmpIds[2] = Blaze.RegisterNeuronAuto("/var/noise_1", BackgroundNoiseWhen, String["/sys/timestamp"], "level 1, original")
+  tmpIds[3] = Blaze.RegisterNeuronAuto("/var/noise_2", AnotherBackgroundNoise, String["/sys/timestamp"], "level 1")
+  tmpIds[4] = Blaze.RegisterNeuronAuto("/calc/foobar", SomeEntangle, String["/var/noise_1", "/var/noise_2"], "level 2")
+  tmpIds[5] = Blaze.RegisterNeuronAuto("/calc/result", SomeStatistic, String["/calc/foobar"], "level 3")
   # basic
   @test all(map(id->id in collect(values(Blaze.mapNameUUID)),tmpIds))
   @test haskey(Blaze.Motivation, tmpIds[1])
@@ -40,15 +40,15 @@ function SomeStatistic(v::Vector{Float64})::Float64
   @test iszero(Blaze.Detail(tmpIds[1]).NumLevel)
   @test isequal(Blaze.Detail("/calc/result").NumLevel, 3)
   # renew neuron
-  tmpId = Blaze.RegisterNeuronAuto("/var/noise_1", "neuron upgrade test", tmpTs+10, String["/sys/timestamp"], BackgroundNoiseWhen)
+  tmpId = Blaze.RegisterNeuronAuto("/var/noise_1", BackgroundNoiseWhen, String["/sys/timestamp"], "neuron upgrade test")
   @test !isequal(tmpIds[2], tmpId)
   tmpIds[2] = tmpId
   # trigger motivation
   @test isnothing( Blaze.Commit(tmpIds[1]) )
   tmpTask = @async Blaze.ExecuteRevision()
   # upgrade inside runtime
-  tmpIds[2] = Blaze.RegisterNeuronAuto("/var/noise_1", "neuron upgrade test", tmpTs+20, String["/sys/timestamp"], BackgroundNoiseWhen)
-  tmpIds[4] = Blaze.RegisterNeuronAuto("/calc/foobar", "level 2 renewed", tmpTs+20, String["/var/noise_1", "/var/noise_2"], SomeEntangleRenewed)
+  tmpIds[2] = Blaze.RegisterNeuronAuto("/var/noise_1", BackgroundNoiseWhen, String["/sys/timestamp"], "neuron upgrade test")
+  tmpIds[4] = Blaze.RegisterNeuronAuto("/calc/foobar", SomeEntangleRenewed, String["/var/noise_1", "/var/noise_2"], "level 2 renewed")
   wait(tmpTask)
   # continue trigger
   @test Blaze.LastUpdated(tmpIds[5]) > tmpTs

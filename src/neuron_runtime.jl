@@ -71,7 +71,7 @@ function registerNeuron(name::String, desc::String, updated_ts::Int64, input_nam
 	return n1.UUID
 	end
 
-function RegisterNeuronSimple(f::Function, desc::String, updated_ts::Int64)::UInt128
+function RegisterNeuronSimple(f::Function, desc::String)::UInt128
 	@assert length(methods(f)) == 1
 	tmpMeta  = methods(f).ms[1]
 	tmpNames = string(tmpMeta)
@@ -81,17 +81,17 @@ function RegisterNeuronSimple(f::Function, desc::String, updated_ts::Int64)::UIn
 	output_type = Base.return_types(f)
 	@assert length(output_type) == 1
 	output_type = output_type[1]
-	return registerNeuron( string(tmpMeta.name), desc, updated_ts, tmpNames, tmpTypes, output_type, 1.0, true, 0.0, f )
+	return registerNeuron( string(tmpMeta.name), desc, round(Int,time()), tmpNames, tmpTypes, output_type, 1.0, true, 0.0, f )
 	end
 
-function RegisterNeuronAuto(name::String, desc::String, updated_ts::Int64, input_names::Vector, calculation::Function, min_update_seconds::Real=1.0, flag_allow_cache::Bool=true, weight_priority::Real=0.0)::UInt128
+function RegisterNeuronAuto(name::String, calculation::Function, input_names::Vector, desc::String, min_update_seconds::Real=1.0, flag_allow_cache::Bool=true, weight_priority::Real=0.0)::UInt128
 	@assert length(methods(calculation)) == 1
 	tmpMeta  = methods(calculation).ms[1]
 	tmpTypes = Vector{DataType}(collect(tmpMeta.sig.types[2:end]))
 	output_type = Base.return_types(calculation)
 	@assert length(output_type) == 1
 	output_type = output_type[1]
-	return registerNeuron( name, desc, updated_ts, input_names, tmpTypes, output_type, min_update_seconds, flag_allow_cache, weight_priority, calculation )
+	return registerNeuron( name, desc, round(Int,time()), input_names, tmpTypes, output_type, min_update_seconds, flag_allow_cache, weight_priority, calculation )
 	end
 
 function SetNeuronParams(name::String, min_update_seconds::Real, flag_allow_cache::Bool, weight_priority::Real)::Nothing
