@@ -9,7 +9,7 @@ Network = Dict{UInt128, Neuron}();
 Motivation = Dict{UInt128, Float64}();
 mapNameUUID = Dict{String, UInt128}();
 
-function registerNeuron(name::String, desc::String, updated_ts::Int64, input_names::Vector, input_types::Vector{DataType}, output_type::DataType, min_update_seconds::Int64, flag_allow_cache::Bool, weight_priority::Float64, calculation::Function)::UInt128
+function registerNeuron(name::String, desc::String, updated_ts::Real, input_names::Vector, input_types::Vector{DataType}, output_type::DataType, min_update_seconds::Real, flag_allow_cache::Bool, weight_priority::Float64, calculation::Function)::UInt128
 	# check deps
 	input_names = string.(input_names)
 	if !(all(map(x->haskey(mapNameUUID,x),input_names)))
@@ -84,14 +84,14 @@ function RegisterNeuronSimple(f::Function, desc::String, updated_ts::Int64)::UIn
 	return registerNeuron( string(tmpMeta.name), desc, updated_ts, tmpNames, tmpTypes, output_type, 3, false, 0.0, f )
 	end
 
-function RegisterNeuronAuto(name::String, desc::String, updated_ts::Int64, input_names::Vector, calculation::Function)::UInt128
+function RegisterNeuronAuto(name::String, desc::String, updated_ts::Int64, input_names::Vector, calculation::Function, min_update_seconds::Real=1.0, flag_allow_cache::Bool=true, weight_priority::Real=0.0)::UInt128
 	@assert length(methods(calculation)) == 1
 	tmpMeta  = methods(calculation).ms[1]
 	tmpTypes = Vector{DataType}(collect(tmpMeta.sig.types[2:end]))
 	output_type = Base.return_types(calculation)
 	@assert length(output_type) == 1
 	output_type = output_type[1]
-	return registerNeuron( name, desc, updated_ts, input_names, tmpTypes, output_type, 3, false, 0.0, calculation )
+	return registerNeuron( name, desc, updated_ts, input_names, tmpTypes, output_type, min_update_seconds, false, weight_priority, calculation )
 	end
 
 function SetNeuronParams(name::String, min_update_seconds::Real, flag_allow_cache::Bool, weight_priority::Real)::Nothing
