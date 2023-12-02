@@ -9,7 +9,7 @@ Network = Dict{UInt128, Neuron}();
 Motivation = Dict{UInt128, Float64}();
 mapNameUUID = Dict{String, UInt128}();
 
-function registerNeuron(name::String, desc::String, updated_ts::Real, input_names::Vector, input_types::Vector{DataType}, output_type::DataType, min_update_seconds::Real, flag_allow_cache::Bool, weight_priority::Float64, calculation::Function)::UInt128
+function registerNeuron(name::String, desc::String, updated_ts::Int64, input_names::Vector, input_types::Vector{DataType}, output_type::DataType, min_update_seconds::Real, flag_allow_cache::Bool, weight_priority::Float64, calculation::Function)::UInt128
 	# check deps
 	input_names = string.(input_names)
 	if !(all(map(x->haskey(mapNameUUID,x),input_names)))
