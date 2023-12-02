@@ -53,7 +53,7 @@ Blaze.RegisterNeuronAuto("/output", Sumarrize, String["/analysis/1", "/analysis/
 Blaze.Commit(rootUUID)
 Blaze.ExecuteRevision()
 @show Blaze.View("/output")
-
+# 3.0
 
 
 ```
