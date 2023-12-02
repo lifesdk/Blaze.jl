@@ -9,7 +9,7 @@ Network = Dict{UInt128, Neuron}();
 Motivation = Dict{UInt128, Float64}();
 mapNameUUID = Dict{String, UInt128}();
 
-function registerNeuron(name::String, desc::String, updated_ts::Int64, input_names::Vector, input_types::Vector{DataType}, output_type::DataType, min_update_seconds::Real, flag_allow_cache::Bool, weight_priority::Float64, calculation::Function)::UInt128
+function _registerNeuron(name::String, desc::String, updated_ts::Int64, input_names::Vector, input_types::Vector{DataType}, output_type::DataType, min_update_seconds::Real, flag_allow_cache::Bool, weight_priority::Float64, calculation::Function)::UInt128
 	# check deps
 	input_names = string.(input_names)
 	if !(all(map(x->haskey(mapNameUUID,x),input_names)))
@@ -81,10 +81,10 @@ function RegisterNeuronSimple(f::Function, desc::String)::UInt128
 	output_type = Base.return_types(f)
 	@assert length(output_type) == 1
 	output_type = output_type[1]
-	return registerNeuron( string(tmpMeta.name), desc, round(Int,time()), tmpNames, tmpTypes, output_type, 1.0, true, 0.0, f )
+	return _registerNeuron( string(tmpMeta.name), desc, round(Int,time()), tmpNames, tmpTypes, output_type, 1.0, true, 0.0, f )
 	end
 
-function RegisterNeuronAuto(name::String, calculation::Function, input_names::Vector, desc::String, min_update_seconds::Real=1.0, flag_allow_cache::Bool=true, weight_priority::Real=0.0, flagForceUpgrade::Bool=false)::UInt128
+function RegisterNeuron(name::String, calculation::Function, input_names::Vector, desc::String, min_update_seconds::Real=1.0, flag_allow_cache::Bool=true, weight_priority::Real=0.0, flagForceUpgrade::Bool=false)::UInt128
 	@assert length(methods(calculation)) == 1
 	if !flagForceUpgrade && haskey(mapNameUUID,name)
 		throw("$name already exist! Use Update instead.")
@@ -94,7 +94,7 @@ function RegisterNeuronAuto(name::String, calculation::Function, input_names::Ve
 	output_type = Base.return_types(calculation)
 	@assert length(output_type) == 1
 	output_type = output_type[1]
-	return registerNeuron( name, desc, round(Int,time()), input_names, tmpTypes, output_type, min_update_seconds, flag_allow_cache, weight_priority, calculation )
+	return _registerNeuron( name, desc, round(Int,time()), input_names, tmpTypes, output_type, min_update_seconds, flag_allow_cache, weight_priority, calculation )
 	end
 
 function UpdateNeuron(name::String, calculation::Function, input_names::Vector=String[], desc::String="", min_update_seconds::Real=1.0, flag_allow_cache::Bool=true, weight_priority::Real=0.0)::UInt128
@@ -109,7 +109,7 @@ function UpdateNeuron(name::String, calculation::Function, input_names::Vector=S
 	output_type = Base.return_types(calculation)
 	@assert length(output_type) == 1
 	output_type = output_type[1]
-	return registerNeuron( name, desc, round(Int,time()), input_names, tmpTypes, output_type, min_update_seconds, flag_allow_cache, weight_priority, calculation )
+	return _registerNeuron( name, desc, round(Int,time()), input_names, tmpTypes, output_type, min_update_seconds, flag_allow_cache, weight_priority, calculation )
 	end
 
 function SetNeuronParams(name::String, min_update_seconds::Real, flag_allow_cache::Bool, weight_priority::Real)::Nothing

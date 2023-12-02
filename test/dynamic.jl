@@ -27,11 +27,11 @@ function SomeStatistic(v::Vector{Float64})::Float64
   tmpTs = round(Int,time())
   # unit test
   tmpIds = zeros(UInt128,5)
-  tmpIds[1] = Blaze.RegisterNeuronAuto("/sys/timestamp", CurrentTimestamp, String[], "desc: level 0")
-  tmpIds[2] = Blaze.RegisterNeuronAuto("/var/noise_1", BackgroundNoiseWhen, String["/sys/timestamp"], "level 1, original")
-  tmpIds[3] = Blaze.RegisterNeuronAuto("/var/noise_2", AnotherBackgroundNoise, String["/sys/timestamp"], "level 1")
-  tmpIds[4] = Blaze.RegisterNeuronAuto("/calc/foobar", SomeEntangle, String["/var/noise_1", "/var/noise_2"], "level 2")
-  tmpIds[5] = Blaze.RegisterNeuronAuto("/calc/result", SomeStatistic, String["/calc/foobar"], "level 3")
+  tmpIds[1] = Blaze.RegisterNeuron("/sys/timestamp", CurrentTimestamp, String[], "desc: level 0")
+  tmpIds[2] = Blaze.RegisterNeuron("/var/noise_1", BackgroundNoiseWhen, String["/sys/timestamp"], "level 1, original")
+  tmpIds[3] = Blaze.RegisterNeuron("/var/noise_2", AnotherBackgroundNoise, String["/sys/timestamp"], "level 1")
+  tmpIds[4] = Blaze.RegisterNeuron("/calc/foobar", SomeEntangle, String["/var/noise_1", "/var/noise_2"], "level 2")
+  tmpIds[5] = Blaze.RegisterNeuron("/calc/result", SomeStatistic, String["/calc/foobar"], "level 3")
   # basic
   @test all(map(id->id in collect(values(Blaze.mapNameUUID)),tmpIds))
   @test haskey(Blaze.Motivation, tmpIds[1])
@@ -40,8 +40,8 @@ function SomeStatistic(v::Vector{Float64})::Float64
   @test iszero(Blaze.Detail(tmpIds[1]).NumLevel)
   @test isequal(Blaze.Detail("/calc/result").NumLevel, 3)
   # renew neuron
-  tmpId = Blaze.UpdateNeuron("/var/noise_1", BackgroundNoiseWhen)
   sleep(1.3)
+  tmpId = Blaze.UpdateNeuron("/var/noise_1", BackgroundNoiseWhen)
   @test !isequal(tmpIds[2], tmpId)
   tmpIds[2] = tmpId
   # trigger motivation
