@@ -56,7 +56,7 @@ function _registerNeuron(name::String, desc::String, updated_ts::Int64, input_na
 	mapNameUUID[n1.UniqueName] = n1.UUID
 	# register source
 	if isempty(input_names)
-		Motivation[n1.UUID] = n3.LastUpdatedTimestamp + n2.MinUpdateIntervalSeconds
+		Motivation[n1.UUID] = iszero(n3.LastUpdatedTimestamp) ? 0.0 : n3.LastUpdatedTimestamp + n2.MinUpdateIntervalSeconds
 	end
 	# register stream
 	for c in input_names
