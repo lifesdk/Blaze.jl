@@ -48,11 +48,11 @@ Blaze.RegisterNeuron("/output", Sumarrize, ["/analysis/1", "/analysis/2"], "pass
 
 
 
-# Use CRON or similar logic to trigger updates, then
+# Runtime
 
-Blaze.Trigger("/root/spider")
-Blaze.ExecuteRevision()
-@show Blaze.View("/output")
+Blaze.Trigger("/root/spider")  # shall be triggered by CRON
+Blaze.ExecuteRevision()        # optional; idempotent.
+@show Blaze.View("/output")    # just for REPL
 # 3.0
 
 
