@@ -24,7 +24,7 @@ function Sumarrize(value_mean::Vector{Float64}, factors::Vector{Float64})::Float
 	Blaze.RegisterNeuron("/analysis/1", SomeAnalysis, ["/root/spider"], "<- unique path name, handler function, input params")
 	Blaze.RegisterNeuron("/analysis/2", OtherFactors, ["/root/spider"], "length(input_names) == number of input params of handler function")
 	Blaze.RegisterNeuron("/output", Sumarrize, ["/analysis/1", "/analysis/2"], "pass input params in order")
-	Blaze.Trigger("/root/spider")
+	Blaze.AutoTrigger()
 	Blaze.ExecuteRevision()
 	@test isequal(Blaze.View("/output"), 3.0)
 	end
