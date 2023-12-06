@@ -48,7 +48,7 @@ function SomeStatistic(v::Vector{Float64})::Float64
   @test isnothing( Blaze.Trigger(tmpIds[1]) )
   @test isnothing( Blaze.Trigger(SubString["/sys/timestamp","/sys/timestamp"]) )
   @test isnothing( Blaze.Trigger(SubString("/sys/timestampasdf",1:14)) )
-  tmpTask = @async Blaze.ExecuteRevision()
+  tmpTask = @async Blaze.AutoExecute()
   # upgrade inside runtime
   tmpIds[2] = Blaze.UpdateNeuron("/var/noise_1", BackgroundNoiseWhen, String["/sys/timestamp"], "neuron upgrade test")
   tmpIds[4] = Blaze.UpdateNeuron("/calc/foobar", SomeEntangleRenewed, String["/var/noise_1", "/var/noise_2"], "level 2 renewed")

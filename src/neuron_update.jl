@@ -16,7 +16,7 @@ function Trigger(name::S)::Nothing where S <: AbstractString
 	return Trigger(mapNameUUID[name])
 	end
 
-function AutoTrigger()
+function AutoTrigger()::Nothing
 	tmpIds = filter(p->p[2]<time(), collect(Motivation))
 	if length(tmpIds) > 0
 		Trigger(map(p->p[1],tmpIds))
@@ -103,6 +103,10 @@ function ExecuteRevision()::Nothing
 	return nothing
 	end
 
+function AutoExecute()::Nothing
+	AutoTrigger()
+	ExecuteRevision()
+	end
 
 
 
@@ -139,5 +143,4 @@ function ExecuteRevision()::Nothing
 
 
 
-
-
+# EOF
