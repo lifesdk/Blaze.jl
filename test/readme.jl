@@ -20,10 +20,10 @@ function Sumarrize(value_mean::Vector{Float64}, factors::Vector{Float64})::Float
 	end
 
 @testset "Blaze.jl" begin
-	Blaze.RegisterNeuron("/root/spider", SomeSpider, String[], "since SomeSpider doesn't take any params, use an empty array as its input.")
-	Blaze.RegisterNeuron("/analysis/1", SomeAnalysis, String["/root/spider"], "path names are user-defined,")
-	Blaze.RegisterNeuron("/analysis/2", OtherFactors, String["/root/spider"], "as long as you quote it correctly")
-	Blaze.RegisterNeuron("/output", Sumarrize, String["/analysis/1", "/analysis/2"], "pass input names in order")
+	Blaze.RegisterNeuron("/root/spider", SomeSpider, [], "node description here")
+	Blaze.RegisterNeuron("/analysis/1", SomeAnalysis, ["/root/spider"], "<- unique path name, handler function, input params")
+	Blaze.RegisterNeuron("/analysis/2", OtherFactors, ["/root/spider"], "length(input_names) == number of input params of handler function")
+	Blaze.RegisterNeuron("/output", Sumarrize, ["/analysis/1", "/analysis/2"], "pass input params in order")
 	Blaze.Trigger("/root/spider")
 	Blaze.ExecuteRevision()
 	@test isequal(Blaze.View("/output"), 3.0)
