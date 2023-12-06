@@ -5,9 +5,9 @@ struct Neuron
 	Cache::Base.RefValue{NeuronCache}
 	end
 
-Network = Dict{UInt128, Neuron}();
-Motivation = Dict{UInt128, Float64}();
-mapNameUUID = Dict{String, UInt128}();
+Network = Dict{UInt128, Neuron}();     # UUID => structure
+Motivation = Dict{UInt128, Float64}(); # UUID => MinUpdateTimestamp
+mapNameUUID = Dict{String, UInt128}(); # name => UUID
 
 function _registerNeuron(name::String, desc::String, updated_ts::Int64, input_names::Vector, input_types::Vector{DataType}, output_type::DataType, min_update_seconds::Real, flag_allow_cache::Bool, weight_priority::Float64, calculation::Function)::UInt128
 	# check deps
