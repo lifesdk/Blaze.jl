@@ -58,9 +58,9 @@ function SomeStatistic(v::Vector{Float64})::Float64
   @test !isnothing(Blaze.Network[tmpIds[5]].Cache[].LastResult[])
   @test typeof(Blaze.View("/calc/result")) == Float64
   for i in 1:5
-    @info i
-    @info Blaze.Network[tmpIds[i]].Base[].UniqueName
-    @info Blaze.Network[tmpIds[i]].Cache[].LastResult[]
+    @debug i
+    @debug Blaze.Network[tmpIds[i]].Base[].UniqueName
+    @debug Blaze.Network[tmpIds[i]].Cache[].LastResult[]
   end
-  @show Blaze.Detail("/calc/result")
+  @debug Blaze.Detail("/calc/result")
   end
