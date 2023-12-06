@@ -29,9 +29,11 @@ function Revise(UUID::UInt128)::Bool
 	# calculation
 		lock(n.Cache[].ProcessLock)
 		try
-			n.Cache[].LastResult = n.Cache[].Calculation(
+			tmpTask = Threads.@spawn n.Cache[].Calculation(
 				map(x->Network[x].Cache[].LastResult[], n.Cache[].UpstreamUUIDs)...
-			) |> Ref
+			)
+			wait(tmpTask)
+			n.Cache[].LastResult = Ref(tmpTask.result)
 			n.Cache[].LastUpdatedTimestamp = time()
 			n.Cache[].CounterCalled += 1
 		catch e
