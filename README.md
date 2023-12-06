@@ -51,8 +51,8 @@ Blaze.RegisterNeuron("/output", Sumarrize, ["/analysis/1", "/analysis/2"], "pass
 # Runtime
 
 #Blaze.Trigger("/root/spider") # shall be triggered by CRON
-Blaze.AutoTrigger()            # equivalent; trigger all expired motivation
-Blaze.ExecuteRevision()        # optional; idempotent.
+Blaze.AutoTrigger()            # equivalent; trigger all expired motivation; async
+Blaze.ExecuteRevision()        # optional; idempotent; synchronous
 @show Blaze.View("/output")    # just for REPL
 # 3.0
 
