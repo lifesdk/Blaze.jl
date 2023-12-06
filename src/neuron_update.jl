@@ -16,6 +16,14 @@ function Trigger(name::S)::Nothing where S <: AbstractString
 	return Trigger(mapNameUUID[name])
 	end
 
+function AutoTrigger()
+	tmpIds = filter(p->p[2]<time(), collect(Motivation))
+	if length(tmpIds) > 0
+		Trigger(map(p->p[1],tmpIds))
+	end
+	return nothing
+	end
+
 function Revise(UUID::UInt128)::Bool
 	# from top to bot
 	# must only be triggered automatically
