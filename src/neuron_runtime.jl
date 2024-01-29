@@ -97,13 +97,19 @@ function RegisterNeuron(name::String, calculation::Function, input_names::Vector
 	return _registerNeuron( name, desc, round(Int,time()), input_names, tmpTypes, output_type, min_update_seconds, flag_allow_cache, weight_priority, calculation )
 	end
 
-function UpdateNeuron(name::String, calculation::Function, input_names::Vector=String[], desc::String="", min_update_seconds::Real=1.0, flag_allow_cache::Bool=true, weight_priority::Real=0.0)::UInt128
+function UpdateNeuron(name::String, calculation::Function, input_names::Vector=String[], desc::String="", min_update_seconds::Real=0.0, flag_allow_cache::Bool=true, weight_priority::Real=0.0)::UInt128
 	@assert length(methods(calculation)) == 1
 	@assert haskey(mapNameUUID,name)
-	if isempty(input_names) && isempty(desc)
-		input_names = Network[mapNameUUID[name]].Base[].NamesFactor
-		desc = Network[mapNameUUID[name]].Base[].Description
-	end
+	# check input
+		if isempty(input_names)
+			input_names = Network[mapNameUUID[name]].Base[].NamesFactor
+		end
+		if isempty(desc)
+			desc = Network[mapNameUUID[name]].Base[].Description
+		end
+		if iszero(min_update_seconds)
+			min_update_seconds = Network[mapNameUUID[name]].Params[].MinUpdateIntervalSeconds
+		end
 	tmpMeta  = methods(calculation).ms[1]
 	tmpTypes = Vector{DataType}(collect(tmpMeta.sig.types[2:end]))
 	output_type = Base.return_types(calculation)
